@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PPSM Thesis Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f7f6; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #0056b3; color: white; }
+        .status-Pending, .status-Extend { color: orange; font-weight: bold; }
+        .status-Submitted { color: green; font-weight: bold; }
+        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        .btn-add { background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: bold;}
+        .btn-add:hover { background-color: #218838; }
+        .btn-update { background-color: #6c757d; color: white; border: none; cursor: pointer; border-radius: 4px; padding: 6px 12px; width: auto; font-size: 14px;}
+        .btn-update:hover { background-color: #5a6268; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>PPSM Thesis Tracker Dashboard</h1>
+    
+    <h2>Add New Student</h2>
+    <form id="addStudentForm">
+        <input type="text" id="name" placeholder="Student Name" required>
+        <input type="email" id="extEmail" placeholder="External Examiner Email" required>
+        <input type="date" id="deadline" required>
+        <button type="submit" class="btn-add">Add to System</button>
+    </form>
+
+    <h2>Current Thesis Status</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>External Examiner</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr><td colspan="5">Loading data...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // REPLACE THIS WITH YOUR DEPLOYED GOOGLE SCRIPT URL
+    const GAS_URL = "https://script.google.com/macros/library/d/1GICH4woXcLIYWqR7jonrzoiSyJn2rnqmKzHmxaxX91cwp8t2dwo2-igF/2";
+
+    // Fetch and display data
+    async function loadData() {
+        const response = await fetch(GAS_URL);
+        const data = await response.json();
+        
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        
+        data.forEach(row => {
+            if(row.name) {
+                // Only show the update button if the status is NOT Submitted
+                let actionBtn = '';
+                if (row.status !== 'Submitted') {
+                    actionBtn = `<button class="btn-update" onclick="updateStatus(${row.row}, 'Submitted', this)">Mark Submitted</button>`;
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.name}</td>
+                        <td>${row.extEmail}</td>
+                        <td>${row.deadline}</td>
+                        <td class="status-${row.status}">${row.status}</td>
+                        <td>${actionBtn}</td>
+                    </tr>
+                `;
+            }
+        });
+    }
+
+    // Submit new student
+    document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = e.target.querySelector('button');
+        submitBtn.textContent = "Adding...";
+        
+        const payload = {
+            action: "add", // Tell the script we are adding a row
+            name: document.getElementById('name').value,
+            extEmail: document.getElementById('extEmail').value,
+            deadline: document.getElementById('deadline').value
+        };
+
+        await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'no-cors', // This bypasses the browser block
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify(payload)
+        });
+ 
+        e.target.reset();
+        submitBtn.textContent = "Add to System";
+        loadData(); // Reload table
+    });
+
+    // Update existing student status
+    async function updateStatus(rowNum, newStatus, btnElement) {
+        if (!confirm("Change this student's status to Submitted?")) return;
+        
+        btnElement.textContent = "Updating...";
+        btnElement.disabled = true;
+
+        const payload = {
+            action: "update", // Tell the script we are updating a row
+            row: rowNum,
+            status: newStatus
+        };
+
+        await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'no-cors', // This bypasses the browser block
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        loadData(); // Reload table to show the new status
+    }
+
+    // Load data when page opens
+    loadData();
+</script>
+
+</body>
+</html>
