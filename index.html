@@ -384,13 +384,30 @@
         e.target.reset(); setTimeout(() => { btn.textContent = "Start Final Tracking"; btn.disabled = false; document.querySelectorAll('.nav-item')[2].click(); loadData(); }, 1500); 
     });
 
-    // Updates
-    async function updateStatus(rowNum, type, newStatus, btnElement) {
-        if (!confirm("Finalize this step? Reminders will stop.")) return;
-        btnElement.textContent = "Saving..."; btnElement.disabled = true;
-        await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "update", type: type, row: rowNum, status: newStatus }) });
-        setTimeout(loadData, 1500); 
-    }
+    // Updates (Instant UI Update)
+async function updateStatus(rowNum, type, newStatus, btnElement) {
+    if (!confirm("Finalize this step? Reminders will stop.")) return;
+    
+    btnElement.textContent = "Saving..."; 
+    btnElement.disabled = true;
+
+    // 1. Send the save command to Google in the background
+    await fetch(GAS_URL, { 
+        method: 'POST', 
+        mode: 'no-cors', 
+        body: JSON.stringify({ action: "update", type: type, row: rowNum, status: newStatus }) 
+    });
+
+    // 2. Instantly update the UI without reloading
+    const rowTr = btnElement.closest('tr');
+    const badge = rowTr.querySelector('.status-badge');
+    badge.textContent = newStatus;
+    badge.className = `status-badge status-${newStatus}`;
+    
+    // 3. Remove the button
+    btnElement.style.display = 'none';
+}
+    
 </script>
 </body>
 </html>
