@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPSM Thesis Intelligence Portal — USM</title>
+    <title>Math ThesisPulse</title>
     <!-- Plus Jakarta Sans Font -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
@@ -99,12 +99,11 @@
     <!-- ================= GLASSMORPHIC ADMIN LOGIN OVERLAY ================= -->
     <div id="login-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-5 bg-[radial-gradient(circle_at_top_right,#19457a,#0b2545_55%,#050f1d_100%)] overflow-y-auto">
         <div class="w-full max-w-md bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl p-8 sm:p-10 shadow-2xl border-t-4 border-usm-gold animate-slide-up text-center my-auto">
-            <!-- USM Emblem -->
-            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-usm-navy to-usm-navyLight text-white flex items-center justify-center font-extrabold text-xl tracking-wider border-2 border-usm-gold shadow-lg shadow-usm-navy/30">
-                USM
-            </div>
-            <h2 class="text-2xl font-extrabold text-usm-navy dark:text-white tracking-tight">PPSM Thesis Portal</h2>
-            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 mb-7">
+            <h2 class="text-2xl font-extrabold text-usm-navy dark:text-white tracking-tight">Math ThesisPulse</h2>
+            <p class="text-xs sm:text-sm font-bold text-usm-gold mt-1.5 tracking-wide">
+                School of Mathematical Sciences, USM
+            </p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 mb-7">
                 Sign in to manage examiner panels &amp; final submissions
             </p>
 
@@ -201,14 +200,9 @@
         <!-- COLLAPSIBLE SIDEBAR -->
         <aside id="sidebar" class="no-print fixed lg:static inset-y-0 left-0 z-40 w-[270px] bg-gradient-to-b from-usm-navy via-[#0f2f57] to-usm-navyDark text-white flex flex-col shrink-0 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-xl lg:shadow-none">
             <!-- Brand Header -->
-            <div class="px-5 py-6 flex items-center gap-3.5 border-b border-white/10">
-                <div class="w-11 h-11 rounded-xl bg-white text-usm-navy flex items-center justify-center font-extrabold text-sm tracking-wide border-2 border-usm-gold shrink-0 shadow-md">
-                    USM
-                </div>
-                <div class="min-w-0">
-                    <h2 class="text-sm font-extrabold tracking-wider text-white truncate">PPSM ADMIN</h2>
-                    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-usm-gold mt-0.5 truncate">Thesis Intelligence</p>
-                </div>
+            <div class="px-5 py-6 border-b border-white/10">
+                <h2 class="text-[15px] font-extrabold tracking-wide text-white leading-snug">Math ThesisPulse</h2>
+                <p class="text-[11px] font-semibold text-usm-gold mt-1 leading-snug">School of Mathematical Sciences, USM</p>
             </div>
 
             <!-- Navigation Menu -->
@@ -264,7 +258,7 @@
 
             <!-- Sidebar Footer -->
             <div class="px-5 py-4 border-t border-white/10 flex items-center justify-between text-xs text-white/55">
-                <span class="font-semibold">Portal v5.0</span>
+                <span class="font-semibold">Math ThesisPulse v5.0</span>
                 <button type="button" onclick="logout()"
                     class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-red-500 text-white font-semibold text-xs transition cursor-pointer">
                     Log Out
@@ -368,7 +362,7 @@
                         <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Live Examiner Tracking</h3>
-                                <p class="text-xs text-slate-500 hidden print:block">Universiti Sains Malaysia — PPSM Thesis Evaluation Report</p>
+                                <p class="text-xs text-slate-500 hidden print:block">Math ThesisPulse — School of Mathematical Sciences, USM</p>
                             </div>
                             <div class="no-print flex flex-wrap items-center gap-2">
                                 <button type="button" onclick="exportCSV('initial')"
@@ -560,7 +554,7 @@
                         <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
                             <div>
                                 <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Final Submission Tracking</h3>
-                                <p class="text-xs text-slate-500 hidden print:block">Universiti Sains Malaysia — Final Thesis Clearance Report</p>
+                                <p class="text-xs text-slate-500 hidden print:block">Math ThesisPulse — School of Mathematical Sciences, USM</p>
                             </div>
                             <div class="no-print flex flex-wrap items-center gap-2">
                                 <button type="button" onclick="exportCSV('final')"
@@ -1059,7 +1053,7 @@
             'final-dashboard': 'Final Submission Dashboard',
             'final-add': 'New Final Submission Tracker'
         };
-        document.getElementById('page-title').textContent = titles[tabId] || 'PPSM Portal';
+        document.getElementById('page-title').textContent = titles[tabId] || 'Math ThesisPulse';
         toggleSidebar(false);
     }
 
@@ -1446,7 +1440,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `PPSM_${type}_${isPreviewMode ? 'preview' : 'tracking'}_${getOffsetISODate(0)}.csv`;
+            link.download = `Math_ThesisPulse_${type}_tracking_${getOffsetISODate(0)}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
